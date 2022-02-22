@@ -1,3 +1,3 @@
-module Groupie-Tracker
+module API-golang
 
 go 1.17

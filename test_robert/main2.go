@@ -37,8 +37,8 @@ func main() {
 	var artistes []Artist
 	json.Unmarshal(responseData, &artistes)
 
-	for _, abc := range artistes {
-		fmt.Println(abc.Name)
+	for _, artist := range artistes {
+		fmt.Println(artist.Name)
 
 	}
 

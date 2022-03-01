@@ -21,7 +21,12 @@ type Artist struct {
     Relations    string   `json:"relations"`
 }
 
+func homepage(w http.ResponseWriter, r *http.Request) {
+	template, _ := template.ParseFiles("test.html")
+	title := "groupie-Tracker"
+	template.Execute(w, title)
 
+}
 
 func main() {
 
@@ -46,4 +51,3 @@ func main() {
     } 
 
     }
-    

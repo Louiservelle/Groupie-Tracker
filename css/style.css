@@ -1,4 +1,77 @@
+/*Importation Police*/
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200;300;400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200;300;400&family=Petrona:ital,wght@0,100;0,200;1,100&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200;300;400&family=Permanent+Marker&family=Petrona:ital,wght@0,100;0,200;1,100&display=swap');
+
+body{
+    height: 100vh;
+    background-color: #364958;
+    padding: 0;
+    margin: 0;
+}
+
 h1{
+    margin: 0;
+    text-align: center;
+    font-family: Permanent Marker;
+    font-size: 96px;
     color: #87BBA2;
-;
+}
+
+#images{
+    display: flex;
+    width: 80%;
+    max-width: 1300px;
+    margin: 30px auto 0;
+    flex-wrap: wrap;
+    justify-content: center
+}
+
+img{
+    margin: 20px;
+}
+
+footer{
+    color: white;
+    bottom: 0;
+    font-family: Oswald;
+    margin-left: 25%;
+}
+
+/*MOBILE FIRST*/
+@media screen and (max-width: 700px) {
+    h1{
+        font-size: 50px;
+    }
+
+    #images{
+        display: flex;
+        width: 80%;
+        max-width: 1300px;
+        margin: 30px auto 0;
+        flex-wrap: wrap;
+        justify-content: center
+    }
+
+    img{
+        margin: 10px;
+    }
+}
+@media screen and (max-width: 378px) {
+    h1{
+        font-size: 37px;
+    }
+
+    #images{
+        display: flex;
+        width: 80%;
+        max-width: 1300px;
+        margin: 30px auto 0;
+        flex-wrap: wrap;
+        justify-content: center
+    }
+
+    img{
+        margin: 9px;
+    }
 }

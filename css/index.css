@@ -1,0 +1,49 @@
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200;300;400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200;300;400&family=Petrona:ital,wght@0,100;0,200;1,100&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200;300;400&family=Permanent+Marker&family=Petrona:ital,wght@0,100;0,200;1,100&display=swap');
+
+@media screen and (max-width: 700px) {
+    h1{
+        font-size: 20px;
+    }
+}
+
+body{
+    height: 100vh;
+    background-color: #364958;
+    padding: 0;
+    margin: 0;
+}
+
+h1{
+    padding-top: 10px;
+    margin: 0;
+    text-align: center;
+    font-family: Permanent Marker;
+    font-size: 70px;
+    color: #87BBA2;
+}
+#groups{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 70vh;
+}
+button{
+    background-color: #C9E4CA;
+    box-shadow: 10px 10px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 20px;
+    border: none;
+    width: 450px;
+    height: 150px;
+    font-size: 40px;
+    font-family: Petrona;
+    color: #364958;
+}
+
+footer{
+    color: white;
+    font-family: Oswald;
+    text-align: center;
+
+}

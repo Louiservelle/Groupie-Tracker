@@ -1,9 +1,20 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link rel="stylesheet" href="css/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
-<body>
-<img src="{{.Img}}"/>
-</body>
+    <body>
+    <h1>Music Group</h1>
+        <div id="images">
+            {{range .Artists}}
+                <a href="id.html"><img src="{{.Image}}"/></a>
+            {{end}}
+        </div>
+    <footer>
+        ©2022 2023 All right reserved.
+        Robert Ndzonghan - Louis Servelle
+        https://github.com/Louiservelle/Groupie-Tracker
+    </footer>
+    </body>
 </html>

@@ -10,7 +10,7 @@ import (
 	"os"
 )
 
-type Artist []struct {
+type Artist struct {
 	ID           int      `json:"id"`
 	Image        string   `json:"image"`
 	Name         string   `json:"name"`
@@ -22,10 +22,7 @@ type Artist []struct {
 	Relations    string   `json:"relations"`
 }
 type Data struct {
-	Name   string
-	Img    string
-	Global string
-	Id     int
+	Artists []Artist
 }
 
 func artist(w http.ResponseWriter, r *http.Request) {
@@ -42,17 +39,19 @@ func artist(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 
-	var artistes Artist
+	var artistes []Artist
 	json.Unmarshal(responseData, &artistes)
 
-	for i := 0; i < len(artistes); i++ {
-		Api := Data{
-			Name: artistes[i].Name,
-			Img:  artistes[i].Image,
-			Id:   artistes[i].ID,
-		}
-		template.Execute(w, Api)
+	Api := Data{
+		Artists: artistes,
 	}
+	template.Execute(w, Api)
+}
+
+func homepage(w http.ResponseWriter, r *http.Request) {
+	template2, _ := template.ParseFiles("index.html")
+	title := "groupie-Tracker"
+	template2.Execute(w, title)
 }
 
 func main() {
@@ -60,7 +59,8 @@ func main() {
 	css := http.FileServer(http.Dir("./css"))
 	http.Handle("/css/", http.StripPrefix("/css/", css))
 
-	http.HandleFunc("/", artist)
+	http.HandleFunc("/", homepage)
+	http.HandleFunc("/artist", artist)
 
 	log.Fatal(http.ListenAndServe(":80", nil))
 }

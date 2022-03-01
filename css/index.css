@@ -40,7 +40,18 @@ button{
     font-family: Petrona;
     color: #364958;
 }
-
+button:hover{
+    background-color: #C9E4CA;
+    box-shadow: 10px 10px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 20px;
+    border: none;
+    width: 450px;
+    height: 150px;
+    font-size: 40px;
+    font-family: Petrona;
+    color: #364958;
+    cursor: pointer;
+}
 footer{
     color: white;
     font-family: Oswald;

@@ -8,6 +8,8 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"path"
+	"strconv"
 )
 
 type Artist struct {
@@ -21,11 +23,23 @@ type Artist struct {
 	ConcertDates string   `json:"concertDates"`
 	Relations    string   `json:"relations"`
 }
+
+type Artisttest struct {
+	ID           int
+	Image        string
+	Name         string
+	Members      []string
+	CreationDate int
+	FirstAlbum   string
+	Locations    string
+	ConcertDates string
+	Relations    string
+}
 type Data struct {
 	Artists []Artist
 }
 
-func artist(w http.ResponseWriter, r *http.Request) {
+func Getartist(w http.ResponseWriter, r *http.Request) {
 	template, _ := template.ParseFiles("artist.html")
 	response, err := http.Get("https://groupietrackers.herokuapp.com/api/artists")
 
@@ -39,7 +53,6 @@ func artist(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 
-	var artistes []Artist
 	json.Unmarshal(responseData, &artistes)
 
 	Api := Data{
@@ -54,13 +67,35 @@ func homepage(w http.ResponseWriter, r *http.Request) {
 	template2.Execute(w, title)
 }
 
+var artistes []Artist
+
+func artistId(w http.ResponseWriter, r *http.Request) {
+
+	template3, _ := template.ParseFiles("id.html")
+	pathID := r.URL.Path
+	pathID = path.Base(pathID)
+	pathIDint, _ := strconv.Atoi(pathID)
+
+	artistData := Artisttest{
+		ID:           artistes[pathIDint-1].ID,
+		Image:        artistes[pathIDint-1].Image,
+		Members:      artistes[pathIDint-1].Members,
+		CreationDate: artistes[pathIDint-1].CreationDate,
+		FirstAlbum:   artistes[pathIDint-1].FirstAlbum,
+		Locations:    artistes[pathIDint-1].Locations,
+		ConcertDates: artistes[pathIDint-1].ConcertDates,
+		Relations:    artistes[pathIDint-1].Relations,
+	}
+	template3.Execute(w, artistData)
+}
 func main() {
 
 	css := http.FileServer(http.Dir("./css"))
 	http.Handle("/css/", http.StripPrefix("/css/", css))
 
 	http.HandleFunc("/", homepage)
-	http.HandleFunc("/artist", artist)
-
+	http.HandleFunc("/artist", Getartist)
+	http.HandleFunc("/artist/", artistId)
 	log.Fatal(http.ListenAndServe(":80", nil))
+
 }

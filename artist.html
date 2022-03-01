@@ -8,7 +8,7 @@
     <h1>Music Group</h1>
         <div id="images">
             {{range .Artists}}
-                <a href="id.html"><img src="{{.Image}}"/></a>
+                <a href=/artist/{{.ID}}><img alt="{{.Name}}" loading="lazy" src="{{.Image}}"/></a>
             {{end}}
         </div>
     <footer>

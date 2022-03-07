@@ -35,6 +35,10 @@ type Artisttest struct {
 	ConcertDates string //lien API
 	Relations    string //lien API
 }
+type relations struct {
+	datesLocations []string
+}
+
 type Data struct {
 	Artists []Artist
 }

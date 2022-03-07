@@ -31,9 +31,9 @@ type Artisttest struct {
 	Members      []string
 	CreationDate int
 	FirstAlbum   string
-	Locations    string
-	ConcertDates string
-	Relations    string
+	Locations    string //lien API
+	ConcertDates string //lien API
+	Relations    string //lien API
 }
 type Data struct {
 	Artists []Artist
@@ -78,6 +78,7 @@ func artistId(w http.ResponseWriter, r *http.Request) {
 
 	artistData := Artisttest{
 		ID:           artistes[pathIDint-1].ID,
+		Name:         artistes[pathIDint-1].Name,
 		Image:        artistes[pathIDint-1].Image,
 		Members:      artistes[pathIDint-1].Members,
 		CreationDate: artistes[pathIDint-1].CreationDate,
@@ -88,6 +89,16 @@ func artistId(w http.ResponseWriter, r *http.Request) {
 	}
 	template3.Execute(w, artistData)
 }
+
+func getrelations(w http.ResponseWriter, r *http.Request) {
+	relationsapi, err := http.Get("https: //groupietrackers.herokuapp.com/api/relation/"pathID)
+
+	if err != nil {
+		fmt.Print(err.Error())
+		os.Exit(1)
+	}
+}
+
 func main() {
 
 	css := http.FileServer(http.Dir("./css"))

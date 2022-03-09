@@ -5,22 +5,39 @@
     <title>{{.ID}}</title>
 </head>
 <body>
-
-<img src="{{.Image}}">
 <h1>{{.Name}}</h1>
-<h2>{{.Members}}</h2>
-<h2>{{.CreationDate}}</h2>
-<h2>{{.FirstAlbum}}</h2>
-<h1>{{.Relations}}</h1>
+<div id="content">
+    <img src="{{.Image}}">
+</div>
+<h2>Creation du Groupe: {{.CreationDate}}</h2>
+<h2>Date Premiere Album: {{.FirstAlbum}}</h2>
+<br>
+<div id="members">
+    <h3>{{.Members}}</h3>
+</div>
+
 </body>
 <style>
     body{
         background-color: #364958;
     }
+    #content{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
     img{
-        width: 400px;
-        height: 400px;
-        border: 7px solid #87BBA2;
+        width: 250px;
+        height: 250px;
+        border: 5px solid #87BBA2;
+
+    }
+    h1{
+        text-align: center;
+        font-size: 40px;
+    }
+    h2{
+        color: aliceblue;
     }
 </style>
 </html>

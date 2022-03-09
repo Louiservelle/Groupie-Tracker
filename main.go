@@ -35,15 +35,15 @@ type Artisttest struct {
 	ConcertDates string //lien API
 	Relations    string //lien API
 }
-type relations struct {
-	datesLocations []string
+type relation struct {
+	ID             int      `json:"id"`
+	DatesLocations []string `json:"datesLocations"`
 }
-
 type Data struct {
 	Artists []Artist
 }
 
-func Getartist(w http.ResponseWriter, r *http.Request) {
+func getartist(w http.ResponseWriter, r *http.Request) {
 	template, _ := template.ParseFiles("artist.html")
 	response, err := http.Get("https://groupietrackers.herokuapp.com/api/artists")
 
@@ -93,23 +93,28 @@ func artistId(w http.ResponseWriter, r *http.Request) {
 	}
 	template3.Execute(w, artistData)
 }
-
 func getrelations(w http.ResponseWriter, r *http.Request) {
-	relationsapi, err := http.Get("https: //groupietrackers.herokuapp.com/api/relation/"pathID)
+	response, err := http.Get("https: //groupietrackers.herokuapp.com/api/relation/")
 
 	if err != nil {
 		fmt.Print(err.Error())
 		os.Exit(1)
 	}
-}
 
+	responseData, err := ioutil.ReadAll(response.Body)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	json.Unmarshal(responseData, &relation{})
+}
 func main() {
 
 	css := http.FileServer(http.Dir("./css"))
 	http.Handle("/css/", http.StripPrefix("/css/", css))
 
 	http.HandleFunc("/", homepage)
-	http.HandleFunc("/artist", Getartist)
+	http.HandleFunc("/artist", getartist)
 	http.HandleFunc("/artist/", artistId)
 	log.Fatal(http.ListenAndServe(":80", nil))
 

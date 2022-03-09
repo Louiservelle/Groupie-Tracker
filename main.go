@@ -35,14 +35,59 @@ type Artisttest struct {
 	ConcertDates string //lien API
 	Relations    string //lien API
 }
-type relation struct {
-	ID             int      `json:"id"`
-	DatesLocations []string `json:"datesLocations"`
+
+type relations struct {
+	ID             int            `json:"id"`
+	DatesLocations DatesLocations `json:"datesLocations"`
 }
+
+type DatesLocations struct {
+	dunedin       []string `json:"dunedin-new_zealand"`
+	georgia       []string `json:"georgia-usa"`
+	losangeles    []string `json:"los_angeles-usa"`
+	nagoya        []string `json:"nagoya-japan"`
+	northcarolina []string `json:"north_carolina-usa"`
+	osaka         []string `json:"osaka-japan"`
+	penrose       []string `json:"penrose-new_zealand"`
+	saitama       []string `json:"saitama-japan"`
+}
+
+type Locations struct {
+	ID int `json:"id"`
+}
+
+type ConcertDates struct {
+	ID int `json:"id"`
+}
+
 type Data struct {
 	Artists []Artist
 }
+type Datarelation struct {
+	Relations []relations
+}
 
+var relation []relations
+
+//FUNC
+func getrelations(w http.ResponseWriter, r *http.Request) {
+	response, err := http.Get("https: //groupietrackers.herokuapp.com/api/relation/")
+
+	if err != nil {
+		fmt.Print(err.Error())
+		os.Exit(1)
+	}
+
+	responseData, err := ioutil.ReadAll(response.Body)
+	if err != nil {
+		log.Fatal(err)
+	}
+	testrelation := Datarelation{
+		Relations: &relations,
+	}
+	json.Unmarshal(responseData, &relations{})
+
+}
 func getartist(w http.ResponseWriter, r *http.Request) {
 	template, _ := template.ParseFiles("artist.html")
 	response, err := http.Get("https://groupietrackers.herokuapp.com/api/artists")
@@ -93,21 +138,7 @@ func artistId(w http.ResponseWriter, r *http.Request) {
 	}
 	template3.Execute(w, artistData)
 }
-func getrelations(w http.ResponseWriter, r *http.Request) {
-	response, err := http.Get("https: //groupietrackers.herokuapp.com/api/relation/")
 
-	if err != nil {
-		fmt.Print(err.Error())
-		os.Exit(1)
-	}
-
-	responseData, err := ioutil.ReadAll(response.Body)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	json.Unmarshal(responseData, &relation{})
-}
 func main() {
 
 	css := http.FileServer(http.Dir("./css"))
@@ -117,5 +148,4 @@ func main() {
 	http.HandleFunc("/artist", getartist)
 	http.HandleFunc("/artist/", artistId)
 	log.Fatal(http.ListenAndServe(":80", nil))
-
 }

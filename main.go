@@ -10,6 +10,7 @@ import (
 	"os"
 	"path"
 	"strconv"
+	"strings"
 )
 
 type Artist struct {
@@ -35,59 +36,39 @@ type Artisttest struct {
 	ConcertDates string //lien API
 	Relations    string //lien API
 }
-
-type relations struct {
-	ID             int            `json:"id"`
-	DatesLocations DatesLocations `json:"datesLocations"`
-}
-
-type DatesLocations struct {
-	dunedin       []string `json:"dunedin-new_zealand"`
-	georgia       []string `json:"georgia-usa"`
-	losangeles    []string `json:"los_angeles-usa"`
-	nagoya        []string `json:"nagoya-japan"`
-	northcarolina []string `json:"north_carolina-usa"`
-	osaka         []string `json:"osaka-japan"`
-	penrose       []string `json:"penrose-new_zealand"`
-	saitama       []string `json:"saitama-japan"`
-}
-
-type Locations struct {
-	ID int `json:"id"`
-}
-
-type ConcertDates struct {
-	ID int `json:"id"`
-}
-
 type Data struct {
 	Artists []Artist
 }
-type Datarelation struct {
-	Relations []relations
+type Datelocations struct {
+	id            int                 `json:"id"`
+	datelocations map[string][]string `json:"datesLocations"`
+}
+type Date struct {
+	ville string
+	date  []string
 }
 
-var relation []relations
-
-//FUNC
 func getrelations(w http.ResponseWriter, r *http.Request) {
-	response, err := http.Get("https: //groupietrackers.herokuapp.com/api/relation/")
-
+	template4, _ := template.ParseFiles("date.html")
+	pathID := r.URL.Path
+	pathID = path.Base(pathID)
+	pathIDint, _ := strconv.Atoi(pathID)
+	var relations Datelocations
+	source := strings.Replace("https://groupietrackers.herokuapp.com/api/relation/:id", ":id", string(pathIDint-1), 1)
+	resp, err := http.Get(source)
 	if err != nil {
 		fmt.Print(err.Error())
 		os.Exit(1)
 	}
-
-	responseData, err := ioutil.ReadAll(response.Body)
+	respdata, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Print(err.Error())
+		os.Exit(1)
 	}
-	testrelation := Datarelation{
-		Relations: &relations,
-	}
-	json.Unmarshal(responseData, &relations{})
-
+	json.Unmarshal(respdata, &relations)
+	template4.Execute(w, relations)
 }
+
 func getartist(w http.ResponseWriter, r *http.Request) {
 	template, _ := template.ParseFiles("artist.html")
 	response, err := http.Get("https://groupietrackers.herokuapp.com/api/artists")
@@ -120,7 +101,7 @@ var artistes []Artist
 
 func artistId(w http.ResponseWriter, r *http.Request) {
 
-	template3, _ := template.ParseFiles("id.html")
+	template3, _ := template.ParseFiles("id.html", "date.html")
 	pathID := r.URL.Path
 	pathID = path.Base(pathID)
 	pathIDint, _ := strconv.Atoi(pathID)
@@ -143,7 +124,6 @@ func main() {
 
 	css := http.FileServer(http.Dir("./css"))
 	http.Handle("/css/", http.StripPrefix("/css/", css))
-
 	http.HandleFunc("/", homepage)
 	http.HandleFunc("/artist", getartist)
 	http.HandleFunc("/artist/", artistId)

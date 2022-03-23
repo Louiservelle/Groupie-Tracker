@@ -10,7 +10,6 @@ import (
 	"os"
 	"path"
 	"strconv"
-	"strings"
 )
 
 type Artist struct {
@@ -24,108 +23,94 @@ type Artist struct {
 	ConcertDates string   `json:"concertDates"`
 	Relations    string   `json:"relations"`
 }
-
-type Artisttest struct {
-	ID           int
-	Image        string
-	Name         string
-	Members      []string
-	CreationDate int
-	FirstAlbum   string
-	Locations    string //lien API
-	ConcertDates string //lien API
-	Relations    string //lien API
-}
 type Data struct {
 	Artists []Artist
 }
+
 type Datelocations struct {
-	id            int                 `json:"id"`
-	datelocations map[string][]string `json:"datesLocations"`
-}
-type Date struct {
-	ville string
-	date  []string
+	ID        int                 `json:"id"`
+	Locations map[string][]string `json:"datesLocations"`
 }
 
-func getrelations(w http.ResponseWriter, r *http.Request) {
-	template4, _ := template.ParseFiles("date.html")
-	pathID := r.URL.Path
-	pathID = path.Base(pathID)
-	pathIDint, _ := strconv.Atoi(pathID)
-	var relations Datelocations
-	source := strings.Replace("https://groupietrackers.herokuapp.com/api/relation/:id", ":id", string(pathIDint-1), 1)
-	resp, err := http.Get(source)
-	if err != nil {
-		fmt.Print(err.Error())
-		os.Exit(1)
-	}
-	respdata, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		fmt.Print(err.Error())
-		os.Exit(1)
-	}
-	json.Unmarshal(respdata, &relations)
-	template4.Execute(w, relations)
-}
+//----------------------------------------------------------------------------------------------------------------\\
+//-----------------------------------------------FUNCTION-ARTIST--------------------------------------------------\\
+//----------------------------------------------------------------------------------------------------------------\\
 
-func getartist(w http.ResponseWriter, r *http.Request) {
+func getartists(w http.ResponseWriter, r *http.Request) {
+
 	template, _ := template.ParseFiles("artist.html")
+
 	response, err := http.Get("https://groupietrackers.herokuapp.com/api/artists")
-
 	if err != nil {
-		fmt.Print(err.Error())
-		os.Exit(1)
+		log.Fatal(err)
 	}
-
 	responseData, err := ioutil.ReadAll(response.Body)
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	json.Unmarshal(responseData, &artistes)
+	json.Unmarshal(responseData, &Artistes)
 
 	Api := Data{
-		Artists: artistes,
+		Artists: Artistes,
 	}
 	template.Execute(w, Api)
 }
 
-func homepage(w http.ResponseWriter, r *http.Request) {
-	template2, _ := template.ParseFiles("index.html")
-	title := "groupie-Tracker"
-	template2.Execute(w, title)
-}
-
-var artistes []Artist
+var Artistes []Artist
 
 func artistId(w http.ResponseWriter, r *http.Request) {
-
-	template3, _ := template.ParseFiles("id.html", "date.html")
+	template2, _ := template.ParseFiles("id.html")
 	pathID := r.URL.Path
 	pathID = path.Base(pathID)
 	pathIDint, _ := strconv.Atoi(pathID)
+	var gomerde Datelocations
 
-	artistData := Artisttest{
-		ID:           artistes[pathIDint-1].ID,
-		Name:         artistes[pathIDint-1].Name,
-		Image:        artistes[pathIDint-1].Image,
-		Members:      artistes[pathIDint-1].Members,
-		CreationDate: artistes[pathIDint-1].CreationDate,
-		FirstAlbum:   artistes[pathIDint-1].FirstAlbum,
-		Locations:    artistes[pathIDint-1].Locations,
-		ConcertDates: artistes[pathIDint-1].ConcertDates,
-		Relations:    artistes[pathIDint-1].Relations,
+	artistData := Artist{
+		ID:           Artistes[pathIDint-1].ID,
+		Name:         Artistes[pathIDint-1].Name,
+		Image:        Artistes[pathIDint-1].Image,
+		Members:      Artistes[pathIDint-1].Members,
+		CreationDate: Artistes[pathIDint-1].CreationDate,
+		FirstAlbum:   Artistes[pathIDint-1].FirstAlbum,
+		Locations:    Artistes[pathIDint-1].Locations,
+		ConcertDates: Artistes[pathIDint-1].ConcertDates,
+		Relations:    Artistes[pathIDint-1].Relations,
 	}
-	template3.Execute(w, artistData)
+	resp, err := http.Get(artistData.Relations)
+	if err != nil {
+		fmt.Print(err.Error())
+		os.Exit(1)
+	}
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		fmt.Print(err.Error())
+		log.Fatal(err)
+	}
+	json.Unmarshal(body, &gomerde)
+
+	M := map[string]interface{}{
+		"Artiste":  artistData,
+		"Relation": gomerde,
+	}
+	template2.Execute(w, M)
 }
 
+//----------------------------------------------------------------------------------------------------------------\\
+//-----------------------------------------------MAIN-------------------------------------------------------------\\
+//----------------------------------------------------------------------------------------------------------------\\
 func main() {
-
+	//Declaration css path
 	css := http.FileServer(http.Dir("./css"))
 	http.Handle("/css/", http.StripPrefix("/css/", css))
-	http.HandleFunc("/", homepage)
-	http.HandleFunc("/artist", getartist)
+	//Link path
+	http.HandleFunc("/artist", getartists)
 	http.HandleFunc("/artist/", artistId)
+	http.HandleFunc("/", homepage)
+	//Listening port 80
 	log.Fatal(http.ListenAndServe(":80", nil))
+}
+
+func homepage(w http.ResponseWriter, r *http.Request) {
+	template3, _ := template.ParseFiles("index.html")
+	template3.Execute(w, r)
 }

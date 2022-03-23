@@ -2,47 +2,49 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>{{.ID}}</title>
+    <title></title>
+    <style>
+        body{
+            background-color: #364958;
+        }
+        #content{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        img{
+            width: 250px;
+            height: 250px;
+            border: 5px solid #87BBA2;
+
+        }
+        h1{
+            text-align: center;
+            font-size: 40px;
+        }
+        h2{
+            color: aliceblue;
+        }
+    </style>
 </head>
 <body>
-<h1>{{.Name}}</h1>
+<h1></h1>
 <div id="content">
-    <img src="{{.Image}}">
+    <img src="{{.Artiste.Image}}">
 </div>
-<h2>Creation du Groupe: {{.CreationDate}}</h2>
-<h2>Date Premiere Album: {{.FirstAlbum}}</h2>
+<h2>Creation du Groupe: {{.Artiste.CreationDate}}</h2>
+<h2>Date Premiere Album: {{.Artiste.FirstAlbum}}</h2>
 <br>
 <div id="members">
-    <h3>{{.Members}}</h3>
+    {{range .Artiste.Members}}
+    <h3>{{.}}</h3>
+    {{end}}
 </div>
-
-{{ template "date" .}}
+{{range $key, $values := .gomerde.Location}}
+<h1>{{$key}}</h1>
+{{range $values}}
+<h2>{{.}}</h2>
+{{end}}
+{{end}}
 </body>
-
-
-
-
-<style>
-    body{
-        background-color: #364958;
-    }
-    #content{
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-    img{
-        width: 250px;
-        height: 250px;
-        border: 5px solid #87BBA2;
-
-    }
-    h1{
-        text-align: center;
-        font-size: 40px;
-    }
-    h2{
-        color: aliceblue;
-    }
-</style>
 </html>

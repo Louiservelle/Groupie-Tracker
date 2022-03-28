@@ -40,10 +40,10 @@
     <h3>{{.}}</h3>
     {{end}}
 </div>
-{{range $key, $values := .gomerde.Location}}
-<h1>{{$key}}</h1>
+{{range $key, $values := .Relation.Locations}}
+<h3><li>{{$key}}</li></h3>
 {{range $values}}
-<h2>{{.}}</h2>
+<ul>{{.}}</ul>
 {{end}}
 {{end}}
 </body>

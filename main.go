@@ -76,6 +76,7 @@ func artistId(w http.ResponseWriter, r *http.Request) {
 		ConcertDates: Artistes[pathIDint-1].ConcertDates,
 		Relations:    Artistes[pathIDint-1].Relations,
 	}
+	fmt.Println(artistData.Relations)
 	resp, err := http.Get(artistData.Relations)
 	if err != nil {
 		fmt.Print(err.Error())

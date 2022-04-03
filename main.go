@@ -63,7 +63,7 @@ func artistId(w http.ResponseWriter, r *http.Request) {
 	pathID := r.URL.Path
 	pathID = path.Base(pathID)
 	pathIDint, _ := strconv.Atoi(pathID)
-	var gomerde Datelocations
+	var relations Datelocations
 
 	artistData := Artist{
 		ID:           Artistes[pathIDint-1].ID,
@@ -87,11 +87,11 @@ func artistId(w http.ResponseWriter, r *http.Request) {
 		fmt.Print(err.Error())
 		log.Fatal(err)
 	}
-	json.Unmarshal(body, &gomerde)
+	json.Unmarshal(body, &relations)
 
 	M := map[string]interface{}{
 		"Artiste":  artistData,
-		"Relation": gomerde,
+		"Relation": relations,
 	}
 	template2.Execute(w, M)
 }

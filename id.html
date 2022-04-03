@@ -41,9 +41,9 @@
     {{end}}
 </div>
 {{range $key, $values := .Relation.Locations}}
-<h3><li>{{$key}}</li></h3>
+<h3 class="villes"><li>{{$key}}</li></h3>
 {{range $values}}
-<ul>{{.}}</ul>
+<ul class="dates">{{.}}</ul>
 {{end}}
 {{end}}
 </body>

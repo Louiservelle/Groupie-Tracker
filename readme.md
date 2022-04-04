@@ -10,6 +10,6 @@ accéder au terminal de votre IDE</h4>
 
 <pre><code>go run main.go</code></pre>
 
-<h4>Puis accéder à https://locallhost:80/ sur votre navigateur.</h4>
+Puis accéder à https://locallhost:80/ sur votre navigateur.
 
 <h4>SERVELLE LOUIS & NDZONGHAN Robert Melveen.</h4>
